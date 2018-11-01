@@ -3,6 +3,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const WriteFilePlugin = require('write-file-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 
 const externals = require('./externals.js');
@@ -116,6 +117,11 @@ module.exports = {
   plugins: [
     new VueLoaderPlugin(),
     new WriteFilePlugin(),
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: 'static/index.html',
+      inject: false,
+    }),
     new CopyPlugin([
       {
         from: path.join(
@@ -147,19 +153,6 @@ module.exports = {
       vue$: 'vue/dist/vue.esm.js',
       'paraview-glance': paths.root,
       'vtk.js/Sources/Rendering/Core/ColorTransferFunction/ColorMaps.json': path.join(paths.source, 'config/ColorMaps.json'),
-    },
-  },
-  optimization: {
-    runtimeChunk: 'single',
-    splitChunks: {
-      cacheGroups: {
-        vendors: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          enforce: true,
-          chunks: 'all',
-        },
-      },
     },
   },
 };
